@@ -1,0 +1,21 @@
+from tinydb import TinyDB, Query
+
+db_1 = TinyDB('db1.json')
+db_2 = TinyDB('db2.json')
+User = Query()
+
+# Mô phỏng tải của từng node
+load_1 = 3
+load_2 = 1
+
+def get_less_loaded_db():
+    return db_1 if load_1 < load_2 else db_2
+
+# Thêm dữ liệu vào db_2 vì tải thấp hơn
+db_2.insert({'id': 1, 'name': 'Charlie', 'score': 75})
+
+# Lấy node ít tải nhất để truy vấn
+selected_db = get_less_loaded_db()
+
+result = selected_db.search(User.name == 'Charlie')
+print("Kết quả truy vấn trên node ít tải:", result)
